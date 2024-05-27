@@ -5,8 +5,18 @@
 <ul class="list-group">
   {% for article in articles %}
       <li class="list-group-item">
-        <a href="article/{{ article.title|urlencode }}">{{ article.title }}</a>
+        <a href="article/{{ article.id|urlencode }}">{{ article.title }}</a>
       </li>
   {% endfor %}
 </ul>
+
+<!-- Display pagination links -->
+{% if articles.has_prev %}
+  <a href="{{ url_for('show_articles', page=articles.prev_num) }}">Previous</a>
+{% endif %}
+
+{% if articles.has_next %}
+  <a href="{{ url_for('show_articles', page=articles.next_num) }}">Next</a>
+{% endif %}
+
 {% endblock content %}

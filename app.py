@@ -1,12 +1,16 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_paginate import get_page_parameter, Pagination
+from models import db, Article
 
-from article_data import articles
-
-app = Flask(__name__)
+app =Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+app.config['PAGINATION_ENABLED'] = True
+app.config['PAGINATION_DEFAULT_PER_PAGE'] = 10
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+
+db.init_app(app)
 
 @app.route('/')
 def index():
@@ -18,17 +22,19 @@ def about():
 
 @app.route('/articles')
 def show_articles():
+    page = get_page_parameter()
+
+    # Fetch articles from the database with pagination
+    articles = Article.query.paginate()
     return render_template('articles.html', articles=articles)
 
-@app.route('/article/<title>/')
-def display_article_title(title):
-    global articles
-    # Find the article with the given article_id
-    article = [a for a in articles if a["title"] == title]
-    if not article:
-         return "No article with the title '{}' was found.".format(title), 404  # Return 404 Not Found with a custom error message
-    return render_template('article.html', article=article[0])
 
+@app.route('/article/<int:article_id>/')
+def display_article(article_id):
+    article = Article.query.get(article_id)
+    if not article:
+        return "No article with the ID '{}' was found.".format(article_id), 404
+    return render_template('article.html', article=article)
 
 @app.route('/create')
 def create():
@@ -40,16 +46,18 @@ def create_post():
     try:
         # Get the article data from the form
         article_data = {
-        'id': request.form.get('id'),
+        'author': request.form.get('author'),
         'title': request.form.get('title'),
         'content': request.form.get('content')
         }
 
         # Create a new Article object and add it to the session
-        db_article = db.Table('Article')(id=article_data['id'], title=article_data['title'], content=article_data['content'])
+        db_article = Article(author=article_data['author'],
+            title=article_data['title'],
+            content=article_data['content'])
         db.session.add(db_article)
         db.session.commit()
-
+        print("Done")
         # Return a response to the user
         return render_template('result.html')
 
@@ -58,11 +66,13 @@ def create_post():
         message = f"An error occurred while creating the article: {str(e)}"
         return render_template('error.html', message=message)
 
-    finally:
-        db.session.close()
+
 
 if __name__ == '__main__':
-  app.run(debug=True)
+    with app.app_context():
+        #db.drop_all()
+        db.create_all()
+    app.run(debug=True)
 
 
 

@@ -1,11 +1,10 @@
-from datetime import datetime
-from flask import g
+from flask_sqlalchemy import SQLAlchemy
+import datetime
 
-# Access the SQLAlchemy instance from the application context
-db = g.db
-
+db = SQLAlchemy()
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    author = db.Column(db.String(100), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    creation_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
+    creation_time = db.Column(db.DateTime, nullable=False, default=lambda:datetime.datetime.now(tz=datetime.timezone.utc))
