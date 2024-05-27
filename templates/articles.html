@@ -1,14 +1,10 @@
 {% extends 'layout.html' %}
 
-
 {% block content %}
 <h1>Articles</h1>
 <ul class="list-group">
   {% for article in articles %}
       <li class="list-group-item">
-        <!-- Use this when we add a database to this project
-          <a href="article/{{ article.id }}"> {{ article.id  }}</a>
-        -->
         <a href="article/{{ article.title|urlencode }}">{{ article.title }}</a>
       </li>
   {% endfor %}
