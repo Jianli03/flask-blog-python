@@ -1,17 +1,47 @@
-
-{% extends 'layout.html' %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block title %}aritcle form page{% endblock %} {%
+block content %}
 <h1>Create a New Article</h1>
 <form action="/create_post" method="POST">
-    <label for="title">Article Title:</label>
-    <input type="text" id="title" name="title" required><br>
-    <label for="author">Author:</label>
-    <input type="text" id="author" name="author" required><br>
-    <label for="content">Article Content:</label>
-    <textarea id="content" name="content" rows="10" cols="50" required></textarea><br>
-    <input type="submit" value="Create Article">
+  <div class="mb-3">
+    <label for="title" class="form-label">Create a title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      aria-describedby="titleHelp"
+      name="title"
+      required
+    />
+    <div id="titleHelp" class="form-text">
+      Make your title sound attractive.
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="Author" class="form-label">Input your name:</label>
+    <input type="text" name="author" class="form-control" id="Author" required />
+    <br/>
+
+  <div class="mb-3">
+    <label for="content"  class="form-label">Your writing goes here:</label>
+    <textarea
+      class="form-control"
+      placeholder=""
+      id="content"
+      name="content"
+      style="height: 400px"
+      required
+    ></textarea>
+    <br />
+  </div>
+
+  <div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input" id="exampleCheck1" />
+    <label class="form-check-label" for="exampleCheck1"
+      >Check me out to agree the Ts && Cs.</label
+    >
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
 {% endblock content %}
-
-

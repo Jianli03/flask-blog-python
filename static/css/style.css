@@ -1,0 +1,9 @@
+.container a {
+  text-decoration: none;
+}
+
+.navbar {
+  height: 60px; /* or any other value you prefer */
+}
+
+h1 { margin-bottom: 2rem; }

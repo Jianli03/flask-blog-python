@@ -1,10 +1,17 @@
 {% extends 'layout.html' %}
 
+{% block title %}article details page{% endblock %}
+
 {% block content %}
-  <ul class="list-group">
-    <li class="list-group-item">{{ article.title }}  </li>
-    <li class="list-group-item">{{ article.author }}  </li>
-    <li class="list-group-item">{{ article.content }}  </li>
-    <li class="list-group-item">{{ article.creation_time.strftime("%Y-%m-%d %H:%M:%S") }} </li>
-  </ul>
+ <article class="blog-post">
+  <h2 class="blog-post-title">{{ article.title }}</h2>
+  <p class="blog-post-meta">{{ article.creation_time.strftime("%Y-%m-%d %H:%M:%S") }} by <a href="#">{{ article.author }} </a></p>
+
+  <p>This blog post shows a few different types of content that’s supported and styled with Bootstrap. Basic typography, lists, tables, images, code, and more are all supported as expected.</p>
+  <hr>
+  <p> {{ article.content }} </p>
+
+  <p>This is some additional paragraph placeholder content. It's a slightly shorter version of the other highly repetitive body text used throughout.</p>
+</article>
+
 {% endblock content %}a
